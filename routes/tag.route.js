@@ -1,0 +1,10 @@
+const tagController = require("../controllers/tag.controller");
+const router = require("express").Router();
+router.post("/createTag", tagController.createTag);
+router.put("/updateTag", tagController.updateTag);
+router.delete("/deleteTag", tagController.deleteTag);
+router.get("/tagDetails", tagController.viewTagDetails);
+router.get("/listTags", tagController.listTags);
+router.get("/export", tagController.exportTags);
+router.get("/search", tagController.findTags);
+module.exports = router;
