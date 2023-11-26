@@ -33,17 +33,17 @@ const createTag = async (req, res) => {
 const listTags = async (req, res) => {
   try {
     const page_no = Number(req.query.page_no);
-
     const name = req.query.name;
     const id = req.query.id;
     const createdAt = req.query.createdAt;
     const updatedAt = req.query.updatedAt;
     const sortBy = req.query.sortBy ?? "createdAt";
     const order = req.query.order ?? "DESC";
-    let no_of_tags;
+    let no_of_tags = 10;
     if (req.query.no_of_tags) {
       no_of_tags = Number(req.query.no_of_tags) ?? 10;
     }
+
     const offset = (page_no - 1) * no_of_tags;
     let tags;
     let maxPageNo;

@@ -71,15 +71,15 @@ module.exports = (sequelize, DataTypes) => {
     most_common_procedures_c: {
       type: DataTypes.STRING(45),
     },
-    create_timestamp: {
+    createdAt: {
       type: DataTypes.DATE,
       field: "create_timestamp",
     },
-    update_timestamp: {
+    updatedAt: {
       type: DataTypes.DATE,
       field: "update_timestamp",
     },
-  });
+  }, {  freezeTableName: true, tableName: "baseline_survey" });
 
   BaselineSurvey.associate = (models) => {
     BaselineSurvey.belongsTo(models.user, {

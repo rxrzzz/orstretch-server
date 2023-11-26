@@ -181,7 +181,6 @@ const listEvents = async (req, res) => {
       offset,
       limit: no_of_events,
       order: [["createdAt", "DESC"]],
-      // include: [{ model: user, attributes: ["email"] }],
     });
 
     return res.status(200).json({ events, totalNoOfEvents, isSuccess: true });
