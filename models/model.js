@@ -31,4 +31,22 @@ db.links = require("./link.js")(sequelize, DataTypes);
 db.baseline_survey = require("./baseline_survey.js")(sequelize, DataTypes);
 db.endofday_survey = require("./endofday_survey.js")(sequelize, DataTypes);
 db.user_tags = require("./user_tags.js")(sequelize, DataTypes);
+
+db.users.hasMany(db.events, {
+  foreignKey: "userid",
+  as: "event",
+});
+db.events.belongsTo(db.users, {
+  foreignKey: "userid",
+  as: "user",
+});
+db.users.hasMany(db.baseline_survey, {
+  foreignKey: "userid",
+  as: "baseline_survey",
+});
+db.baseline_survey.belongsTo(db.users, {
+  foreignKey: "userid",
+  as: "user",
+});
+
 module.exports = db;

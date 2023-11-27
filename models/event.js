@@ -1,15 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
-  const UsageEvent = sequelize.define(
+  const Event = sequelize.define(
     "usage_event",
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-      },
-      userid: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
       },
       timestamp: {
         type: DataTypes.DATE,
@@ -47,14 +43,5 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "usage_event",
     }
   );
-  UsageEvent.associate = (models) => {
-    UsageEvent.belongsTo(models.user, {
-      foreignKey: "userid",
-      as: "user",
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    });
-  };
-
-  return UsageEvent;
+  return Event;
 };

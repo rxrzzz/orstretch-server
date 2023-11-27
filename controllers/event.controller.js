@@ -1,4 +1,5 @@
 const Event = require("../models/model").events;
+const User = require("../models/model").users;
 const Op = require("sequelize").Op;
 const excelJs = require("exceljs");
 const moment = require("moment");
@@ -181,6 +182,7 @@ const listEvents = async (req, res) => {
       offset,
       limit: no_of_events,
       order: [["createdAt", "DESC"]],
+      include: [{ model: User, as: "user", attributes: ["email"] }],
     });
 
     return res.status(200).json({ events, totalNoOfEvents, isSuccess: true });

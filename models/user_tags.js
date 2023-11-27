@@ -24,20 +24,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  UserTags.associate = (models) => {
-    UserTags.belongsTo(models.tags, {
-      foreignKey: "tag_id",
-      as: "tags",
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    });
-    UserTags.belongsTo(models.users, {
-      foreignKey: "user_id",
-      as: "user",
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    });
-  };
-
   return UserTags;
 };

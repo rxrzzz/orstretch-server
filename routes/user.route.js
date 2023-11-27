@@ -9,6 +9,9 @@ router.get("/export", userController.exportUser);
 router.get("/search", userController.findUsers);
 router.get("/searchUsers", userController.searchUsers);
 router.post("/createUser", userController.addUser);
-
+router.get(
+  "/exportUserWithSurveys",
+  userController.exportUserWithBaselineSurveys
+);
 router.post("/changeUserPassword", userController.changeUserPassword);
 module.exports = router;

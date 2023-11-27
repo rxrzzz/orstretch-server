@@ -29,6 +29,7 @@
     "ssh2-sftp-client": "^9.1.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "prisma": "^5.6.0"
   }
 }

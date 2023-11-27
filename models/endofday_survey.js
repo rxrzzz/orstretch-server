@@ -7,10 +7,6 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      userid: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       day: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -62,28 +58,19 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: "create_timestamp"
+        field: "create_timestamp",
       },
       updatedAt: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: "update_timestamp"
+        field: "update_timestamp",
       },
     },
     {
       freezeTableName: true,
-      tableName: "endofday_survey"
+      tableName: "endofday_survey",
     }
   );
-
-  EndOfDaySurvey.associate = (models) => {
-    EndOfDaySurvey.belongsTo(models.user, {
-      foreignKey: "userid",
-      as: "user",
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    });
-  };
 
   return EndOfDaySurvey;
 };

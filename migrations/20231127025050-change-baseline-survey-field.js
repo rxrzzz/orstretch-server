@@ -3,16 +3,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.changeColumn("usage_event", "userid", {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: "user",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    });
+    await queryInterface.renameColumn(
+      "user",
+      "baseline_survey",
+      "baseline_survey_id",
+      {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "baseline_survey",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      }
+    );
     /**
      * Add altering commands here.
      *

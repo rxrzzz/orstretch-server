@@ -1,5 +1,7 @@
 const db = require("../models/model");
 const User = db.users;
+const BaselineSurvey = require("../models/model").baseline_survey;
+const Event = require("../models/model").events;
 const excelJs = require("exceljs");
 const Op = require("sequelize").Op;
 const moment = require("moment");
@@ -39,28 +41,13 @@ const viewUserDetails = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Email parameter not specified", isSuccess: false });
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: { email },
+      include: [{ model: BaselineSurvey, as: "baseline_survey" }],
+    });
     if (user) {
       return res.status(200).json({
-        user: {
-          id: user.id,
-          email: user.email,
-          alternate_email: user.alternate_email,
-          name: user.name,
-          conf_timer: user.conf_timer,
-          tags: user.tags_excel,
-          frequency: user.frequency,
-          surveys_number: user.surveys_number,
-          days_number: user.days_number,
-          current_survey_number: user.current_survey_number,
-          last_survey_check: user.last_survey_check,
-          deleted: user.deleted,
-          main_user_id: user.main_user_id,
-          baseline_survey: user.baseline_survey,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-        },
-        isSuccess: true,
+        user,
       });
     } else {
       return res.status(400).json({
@@ -389,6 +376,7 @@ const listUsers = async (req, res) => {
               },
           ],
         },
+        include: [{ model: Event, as: "event" }],
         offset,
         limit: no_of_users,
         order: [[sortBy, order]],
@@ -399,6 +387,7 @@ const listUsers = async (req, res) => {
       users = await User.findAll({
         offset,
         limit: no_of_users,
+        include: [{ model: Event, as: "event" }],
         order: [[sortBy, order]],
       });
     }
@@ -512,6 +501,118 @@ const exportUser = async (req, res) => {
   }
 };
 
+const exportUserWithBaselineSurveys = async (req, res) => {
+  try {
+    const idArray = req.query.ids;
+    let ids;
+    if (idArray) ids = JSON.parse(idArray);
+    let users;
+    const workbook = new excelJs.Workbook();
+    const sheet = workbook.addWorksheet("users");
+    sheet.columns = [
+      { header: "ID", key: "id" },
+      { header: "Email", key: "email" },
+      { header: "Alternate Email", key: "alternate_email" },
+      { header: "Full Name", key: "name" },
+      { header: "Timer (minutes)", key: "conf_timer" },
+      { header: "Active", key: "active" },
+      { header: "Date Created", key: "createdAt" },
+      { header: "Last Updated", key: "updatedAt" },
+      { header: "Tags", key: "tags_excel" },
+      { header: "Pain Open Surgery", key: "pain_open_surgery" },
+      { header: "Pain Larascopic Surgery", key: "pain_larascopic_surgery" },
+      { header: "Pain Robotic Surgery", key: "pain_robotic_surgery" },
+      { header: "Pain Interfered Relations", key: "pain_interfered_relations" },
+      { header: "Pain Interfered Sleep", key: "pain_interfered_sleep" },
+      { header: "Height", key: "height" },
+      { header: "Age", key: "age" },
+      { header: "Gender", key: "gender" },
+      { header: "Handness", key: "handness" },
+      { header: "Glove Size", key: "glove_size" },
+      { header: "Surgical Procedures (Day)", key: "surgical_procedures_day" },
+      { header: "Days Per Week", key: "days_per_week" },
+      { header: "Exercise", key: "exercise" },
+      { header: "Primary Specialty", key: "primary_speciality" },
+      { header: "Years Open Surgery", key: "years_open_surgery" },
+      { header: "Years Larascopic Surgery", key: "years_laparoscopic_surgery" },
+      { header: "Years Robotic Surgery", key: "years_robotic_surgery" },
+      { header: "Most Common Procedure (A)", key: "most_common_procedures_a" },
+      { header: "Most Common Procedure (B)", key: "most_common_procedures_b" },
+      { header: "Most Common Procedure (C)", key: "most_common_procedures_c" },
+    ];
+
+    if (ids) {
+      users = await User.findAll({
+        where: {
+          id: {
+            [Op.in]: ids,
+          },
+        },
+        include: [{ model: BaselineSurvey, as: "baseline_survey" }],
+      });
+    } else {
+      users = await User.findAll({
+        include: [{ model: BaselineSurvey, as: "baseline_survey" }],
+      });
+    }
+    await users.map((value) => {
+      console.log(value);
+      sheet.addRow({
+        id: value.id,
+        name: value.name,
+        email: value.email,
+        alternate_email: value.alternate_email,
+        conf_timer: value.conf_timer,
+        active: value.active ? "Yes" : "No",
+        createdAt: moment(value.createdAt).format("YYYY-MM-DD HH:MM:SS"),
+        updatedAt: moment(value.createdAt).format("YYYY-MM-DD HH:MM:SS"),
+        tags_excel: value.tags_excel,
+        pain_open_surgery: value.baseline_survey.pain_open_surgery ?? "",
+        pain_larascopic_surgery:
+          value.baseline_survey.pain_larascopic_surgery ?? "",
+        pain_robotic_surgery:
+          value.baseline_survey.pain_robotic_surgery ?? "",
+        pain_interfered_relations:
+          value.baseline_survey.pain_interfered_relations ?? "",
+        pain_interfered_sleep:
+          value.baseline_survey.pain_interfered_sleep ?? "",
+        height: value.baseline_survey.height ?? "",
+        age: value.baseline_survey.age ?? "",
+        gender: value.baseline_survey.gender ?? "",
+        glove_size: value.baseline_survey.glove_size ?? "",
+        surgical_procedures_day:
+          value.baseline_survey.surgical_procedures_day ?? "",
+        days_per_week: value.baseline_survey.days_per_week ?? "",
+        exercise: value.baseline_survey.exercise ?? "",
+        primary_speciality: value.baseline_survey.primary_speciality ?? "",
+        years_open_surgery: value.baseline_survey.years_open_surgery ?? "",
+        years_laparoscopic_surgery:
+          value.baseline_survey.years_laparoscopic_surgery ?? "",
+        years_robotic_surgery:
+          value.baseline_survey.years_robotic_surgery ?? "",
+        most_common_procedures_a:
+          value.baseline_survey.most_common_procedures_a ?? "",
+        most_common_procedures_b:
+          value.baseline_survey.most_common_procedures_b ?? "",
+        most_common_procedures_c:
+          value.baseline_survey.most_common_procedures_c ?? "",
+      });
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment;filename=" + "Or-Stretch-Users-With-Baseline-Surveys.xlsx"
+    );
+    workbook.xlsx.write(res);
+  } catch (err) {
+    return res.status(500).json({ message: err, isSuccess: false });
+  }
+};
+
 module.exports = {
   listUsers,
   deleteUser,
@@ -521,6 +622,7 @@ module.exports = {
   addUser,
   changeUserPassword,
   findUsers,
+  exportUserWithBaselineSurveys,
   searchUsers,
   exportUser,
 };
