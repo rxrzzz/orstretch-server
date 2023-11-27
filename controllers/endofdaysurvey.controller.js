@@ -1,11 +1,12 @@
 require("dotenv").config({ path: "../.env" });
 const EndOfDaySurvey = require("../models/model").endofday_survey;
+
 const triggerEndOfDaySurveyJSONWorkflow = async (req, res) => {
   await fetch(`${process.env.QUALTRICS_ENDODFDAY_TRIGGER}`, {
     method: "POST",
     body: req.body,
   }).then((response) => {
-    return res.json(response.statusText);
+    return res.json(response);
   });
 };
 
@@ -34,8 +35,15 @@ const getEndOfDaySurveys = async (req, res) => {
       limit: no_of_surveys,
       order: [["createdAt", "DESC"]],
     });
-    const maxPageCount = Math.ceil(totalNoOfSurveys / no_of_surveys)
-    return res.status(200).json({ endOfDaySurveys, totalNoOfSurveys, maxPageCount, isSuccess: true });
+    const maxPageCount = Math.ceil(totalNoOfSurveys / no_of_surveys);
+    return res
+      .status(200)
+      .json({
+        endOfDaySurveys,
+        totalNoOfSurveys,
+        maxPageCount,
+        isSuccess: true,
+      });
   } catch (err) {
     return res.status(500).json({ message: err, isSuccess: false });
   }

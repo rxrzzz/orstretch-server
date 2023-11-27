@@ -100,14 +100,12 @@ const getBaselineSurveys = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
     const maxPageCount = Math.ceil(totalNoOfSurveys / no_of_surveys);
-    return res
-      .status(200)
-      .json({
-        baselineSurveys,
-        totalNoOfSurveys,
-        totalNoOfSurveys,
-        isSuccess: true,
-      });
+    return res.status(200).json({
+      baselineSurveys,
+      totalNoOfSurveys,
+      isSuccess: true,
+      maxPageCount,
+    });
   } catch (err) {
     return res.status(500).json({ message: err, isSuccess: false });
   }

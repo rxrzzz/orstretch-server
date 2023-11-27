@@ -16,7 +16,7 @@ const requestLimiter = rateLimit({
 const router = require("express").Router();
 
 router.post(
-  "/submitEndOfDaySurvey",
+  "/triggerEndOfDaySurveyWorkflow",
   requestLimiter,
   endofDaySurveyController.triggerEndOfDaySurveyJSONWorkflow
 );
