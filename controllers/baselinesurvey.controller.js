@@ -1,4 +1,5 @@
 require("dotenv").config({ path: "../.env" });
+const axios = require("axios");
 const BaselineSurvey = require("../models/model").baseline_survey;
 const Users = require("../models/model").users;
 const nodeMailer = require("nodemailer");
@@ -38,12 +39,21 @@ const sendEmail = async (req, res) => {
 };
 
 const triggerBaselineSurveyJSONWorkflow = async (req, res) => {
-  await fetch(`${process.env.QUALTRICS_BASELINE_TRIGGER}`, {
-    method: "POST",
-    body: req.body,
-  }).then((response) => {
-    return res.json(response);
-  });
+  try {
+    const response = await axios.post(
+      `https://iad1.qualtrics.com/inbound-event/v1/events/json/triggers?urlTokenId=${process.env.QUALTRICS_BASELINE_URLTOKENID}&force_isolation=true`,
+      { data: req.body }
+    );
+
+    if (response.data.meta.httpStatus) {
+      return res.status(200).json({
+        status: response.data.meta.httpStatus,
+        isSuccess: true,
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({message: err, isSuccess: false})
+  }
 };
 
 const getSurveyResponses = async (req, res) => {

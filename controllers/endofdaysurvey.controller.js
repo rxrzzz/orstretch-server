@@ -1,13 +1,17 @@
 require("dotenv").config({ path: "../.env" });
+const axios = require("axios");
 const EndOfDaySurvey = require("../models/model").endofday_survey;
 
 const triggerEndOfDaySurveyJSONWorkflow = async (req, res) => {
-  await fetch(`${process.env.QUALTRICS_ENDODFDAY_TRIGGER}`, {
-    method: "POST",
-    body: req.body,
-  }).then((response) => {
-    return res.json(response);
-  });
+  try {
+    const response = await axios.post(
+      `https://iad1.qualtrics.com/inbound-event/v1/events/json/triggers?urlTokenId=${process.env.QUALTRICS_ENDOFDAY_URLTOKENID}`,
+      { data: req.body }
+    );
+    return res.json(response.data);
+  } catch (err) {
+    return res.status(500).json({ message: err, isSuccess: false });
+  }
 };
 
 const getEndOfDaySurveys = async (req, res) => {
@@ -36,14 +40,12 @@ const getEndOfDaySurveys = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
     const maxPageCount = Math.ceil(totalNoOfSurveys / no_of_surveys);
-    return res
-      .status(200)
-      .json({
-        endOfDaySurveys,
-        totalNoOfSurveys,
-        maxPageCount,
-        isSuccess: true,
-      });
+    return res.status(200).json({
+      endOfDaySurveys,
+      totalNoOfSurveys,
+      maxPageCount,
+      isSuccess: true,
+    });
   } catch (err) {
     return res.status(500).json({ message: err, isSuccess: false });
   }
