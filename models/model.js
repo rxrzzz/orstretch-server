@@ -40,7 +40,7 @@ db.events.belongsTo(db.users, {
   foreignKey: "userid",
   as: "user",
 });
-db.users.hasMany(db.baseline_survey, {
+db.users.hasOne(db.baseline_survey, {
   foreignKey: "userid",
   as: "baseline_survey",
 });
@@ -48,5 +48,12 @@ db.baseline_survey.belongsTo(db.users, {
   foreignKey: "userid",
   as: "user",
 });
-
+db.users.hasMany(db.endofday_survey, {
+  foreignKey: "userid",
+  as: "endofday_survey",
+});
+db.endofday_survey.belongsTo(db.users, {
+  foreignKey: "userid",
+  as: "user",
+});
 module.exports = db;

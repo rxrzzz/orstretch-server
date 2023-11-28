@@ -508,7 +508,7 @@ const exportUserWithBaselineSurveys = async (req, res) => {
     if (idArray) ids = JSON.parse(idArray);
     let users;
     const workbook = new excelJs.Workbook();
-    const sheet = workbook.addWorksheet("users");
+    const sheet = workbook.addWorksheet("users_with_baseline_surveys");
     sheet.columns = [
       { header: "ID", key: "id" },
       { header: "Email", key: "email" },
@@ -570,8 +570,7 @@ const exportUserWithBaselineSurveys = async (req, res) => {
         pain_open_surgery: value.baseline_survey.pain_open_surgery ?? "",
         pain_larascopic_surgery:
           value.baseline_survey.pain_larascopic_surgery ?? "",
-        pain_robotic_surgery:
-          value.baseline_survey.pain_robotic_surgery ?? "",
+        pain_robotic_surgery: value.baseline_survey.pain_robotic_surgery ?? "",
         pain_interfered_relations:
           value.baseline_survey.pain_interfered_relations ?? "",
         pain_interfered_sleep:

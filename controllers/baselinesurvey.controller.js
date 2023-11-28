@@ -1,7 +1,9 @@
 require("dotenv").config({ path: "../.env" });
 const axios = require("axios");
+const moment = require("moment");
 const BaselineSurvey = require("../models/model").baseline_survey;
 const Users = require("../models/model").users;
+const excelJs = require("exceljs");
 const nodeMailer = require("nodemailer");
 const Client = require("ssh2-sftp-client");
 const fs = require("fs");
@@ -52,7 +54,7 @@ const triggerBaselineSurveyJSONWorkflow = async (req, res) => {
       });
     }
   } catch (err) {
-    return res.status(500).json({message: err, isSuccess: false})
+    return res.status(500).json({ message: err, isSuccess: false });
   }
 };
 
@@ -87,6 +89,7 @@ const getBaselineSurveys = async (req, res) => {
   try {
     let page_no = 1;
     let no_of_surveys = 10;
+
     if (req.query.page_no) {
       page_no = Number(req.query.page_no) ?? 1;
     }
@@ -120,9 +123,97 @@ const getBaselineSurveys = async (req, res) => {
     return res.status(500).json({ message: err, isSuccess: false });
   }
 };
+
+const exportBaselineSurveys = async (req, res) => {
+  try {
+    const idArray = req.query.ids;
+    let ids;
+    if (idArray) ids = JSON.parse(idArray);
+    let baseline_surveys;
+    const workbook = new excelJs.Workbook();
+    const sheet = workbook.addWorksheet("baseline_surveys");
+    sheet.columns = [
+      { header: "Pain Open Surgery", key: "pain_open_surgery" },
+      { header: "Pain Larascopic Surgery", key: "pain_larascopic_surgery" },
+      { header: "Pain Robotic Surgery", key: "pain_robotic_surgery" },
+      { header: "Pain Interfered Relations", key: "pain_interfered_relations" },
+      { header: "Pain Interfered Sleep", key: "pain_interfered_sleep" },
+      { header: "Height", key: "height" },
+      { header: "Age", key: "age" },
+      { header: "Gender", key: "gender" },
+      { header: "Handness", key: "handness" },
+      { header: "Glove Size", key: "glove_size" },
+      { header: "Surgical Procedures (Day)", key: "surgical_procedures_day" },
+      { header: "Days Per Week", key: "days_per_week" },
+      { header: "Exercise", key: "exercise" },
+      { header: "Primary Specialty", key: "primary_speciality" },
+      { header: "Years Open Surgery", key: "years_open_surgery" },
+      { header: "Years Larascopic Surgery", key: "years_laparoscopic_surgery" },
+      { header: "Years Robotic Surgery", key: "years_robotic_surgery" },
+      { header: "Most Common Procedure (A)", key: "most_common_procedures_a" },
+      { header: "Most Common Procedure (B)", key: "most_common_procedures_b" },
+      { header: "Most Common Procedure (C)", key: "most_common_procedures_c" },
+      { header: "Date Created", key: "created_at" },
+      { header: "Date Updated", key: "updated_at" },
+    ];
+
+    if (ids) {
+      baseline_surveys = await BaselineSurvey.findAll({
+        where: {
+          id: {
+            [Op.in]: ids,
+          },
+        },
+      });
+    } else {
+      baseline_surveys = await BaselineSurvey.findAll();
+    }
+    await baseline_surveys.map((value) => {
+      sheet.addRow({
+        created_at: moment(value.createdAt).format("YYYY-MM-DD HH:MM:SS"),
+        updated_at: moment(value.createdAt).format("YYYY-MM-DD HH:MM:SS"),
+        tags_excel: value.tags_excel,
+        pain_open_surgery: value.pain_open_surgery ?? "",
+        pain_larascopic_surgery: value.pain_larascopic_surgery ?? "",
+        pain_robotic_surgery: value.pain_robotic_surgery ?? "",
+        pain_interfered_relations: value.pain_interfered_relations ?? "",
+        pain_interfered_sleep: value.pain_interfered_sleep ?? "",
+        height: value.height ?? "",
+        age: value.age ?? "",
+        gender: value.gender ?? "",
+        glove_size: value.glove_size ?? "",
+        surgical_procedures_day: value.surgical_procedures_day ?? "",
+        days_per_week: value.days_per_week ?? "",
+        exercise: value.exercise ?? "",
+        primary_speciality: value.primary_speciality ?? "",
+        years_open_surgery: value.years_open_surgery ?? "",
+        years_laparoscopic_surgery: value.years_laparoscopic_surgery ?? "",
+        years_robotic_surgery: value.years_robotic_surgery ?? "",
+        most_common_procedures_a: value.most_common_procedures_a ?? "",
+        most_common_procedures_b: value.most_common_procedures_b ?? "",
+        most_common_procedures_c: value.most_common_procedures_c ?? "",
+      });
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment;filename=" + "Baseline-Surveys.xlsx"
+    );
+    workbook.xlsx.write(res);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: err, isSuccess: false });
+  }
+};
+
 module.exports = {
   sendEmail,
   triggerBaselineSurveyJSONWorkflow,
   getSurveyResponses,
+  exportBaselineSurveys,
   getBaselineSurveys,
 };
