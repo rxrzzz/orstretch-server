@@ -1,4 +1,5 @@
 require("dotenv").config({ path: "../.env" });
+const Op = require("sequelize").Op;
 const excelJs = require("exceljs");
 const moment = require("moment");
 const axios = require("axios");
@@ -101,14 +102,9 @@ const getEndOfDaySurveys = async (req, res) => {
   try {
     let page_no = 1;
     let no_of_surveys = 10;
-    if (req.query.page_no) {
-      page_no = Number(req.query.page_no) ?? 1;
-    }
-    if (req.query.no_of_surveys) {
-      no_of_surveys = Number(req.query.no_of_surveys) ?? 10;
-    }
+    let order = req.query.order ?? "DESC";
+    let sortBy = req.query.sortBy ?? "createdAt";
     const offset = (page_no - 1) * no_of_surveys;
-    const totalNoOfSurveys = await EndOfDaySurvey.count();
 
     if (isNaN(page_no) || page_no <= 0) {
       return res.status(400).json({
@@ -117,21 +113,129 @@ const getEndOfDaySurveys = async (req, res) => {
         isSuccess: false,
       });
     }
+    let day = req.query.day;
+    let mentaly_demanding_surgeries = req.query.mentaly_demanding_surgeries;
+    let physically_demanding_surgeries =
+      req.query.physically_demanding_surgeries;
+    let complex_surgeries = req.query.complex_surgeries;
+    let difficult_surgeries = req.query.difficult_surgeries;
+    let impact_physical = req.query.impact_physical;
+    let impact_mental = req.query.impact_mental;
+    let impact_pain = req.query.impact_pain;
+    let impact_fatigue = req.query.impact_fatigue;
+    let distracting = req.query.distracting;
+    let flow_impact = req.query.flow_impact;
+    let comment = req.query.comment;
+    let createdAt = req.query.createdAt;
+    let updatedAt = req.query.updatedAt;
+
+    if (req.query.page_no) {
+      page_no = Number(req.query.page_no) ?? 1;
+    }
+
+    if (req.query.no_of_surveys) {
+      no_of_surveys = Number(req.query.no_of_surveys) ?? 10;
+    }
+
+    const totalNoOfSurveys = await EndOfDaySurvey.count({
+      where: {
+        [Op.and]: [
+          day !== undefined && { day: { [Op.eq]: day } },
+          mentaly_demanding_surgeries !== undefined && {
+            mentaly_demanding_surgeries: {
+              [Op.eq]: mentaly_demanding_surgeries,
+            },
+          },
+          physically_demanding_surgeries !== undefined && {
+            physically_demanding_surgeries: {
+              [Op.eq]: physically_demanding_surgeries,
+            },
+          },
+          complex_surgeries !== undefined && {
+            complex_surgeries: { [Op.eq]: complex_surgeries },
+          },
+          difficult_surgeries !== undefined && {
+            difficult_surgeries: { [Op.eq]: difficult_surgeries },
+          },
+          impact_physical !== undefined && {
+            impact_physical: { [Op.eq]: impact_physical },
+          },
+          impact_mental !== undefined && {
+            impact_mental: { [Op.eq]: impact_mental },
+          },
+          impact_pain !== undefined && {
+            impact_pain: { [Op.eq]: impact_pain },
+          },
+          impact_fatigue !== undefined && {
+            impact_fatigue: { [Op.eq]: impact_fatigue },
+          },
+          distracting !== undefined && {
+            distracting: { [Op.eq]: distracting },
+          },
+          flow_impact !== undefined && {
+            flow_impact: { [Op.eq]: flow_impact },
+          },
+          comment !== undefined && { comment: { [Op.eq]: comment } },
+        ],
+      },
+    });
+
     const endOfDaySurveys = await EndOfDaySurvey.findAll({
       offset,
       limit: no_of_surveys,
-      order: [["createdAt", "DESC"]],
-      include: [{ model: User, as: "user", attributes: ["email"] }],
+      order: [[sortBy, order]],
+      where: {
+        [Op.and]: [
+          day !== undefined && { day: { [Op.eq]: day } },
+          mentaly_demanding_surgeries !== undefined && {
+            mentaly_demanding_surgeries: {
+              [Op.eq]: mentaly_demanding_surgeries,
+            },
+          },
+          physically_demanding_surgeries !== undefined && {
+            physically_demanding_surgeries: {
+              [Op.eq]: physically_demanding_surgeries,
+            },
+          },
+          complex_surgeries !== undefined && {
+            complex_surgeries: { [Op.eq]: complex_surgeries },
+          },
+          difficult_surgeries !== undefined && {
+            difficult_surgeries: { [Op.eq]: difficult_surgeries },
+          },
+          impact_physical !== undefined && {
+            impact_physical: { [Op.eq]: impact_physical },
+          },
+          impact_mental !== undefined && {
+            impact_mental: { [Op.eq]: impact_mental },
+          },
+          impact_pain !== undefined && {
+            impact_pain: { [Op.eq]: impact_pain },
+          },
+          impact_fatigue !== undefined && {
+            impact_fatigue: { [Op.eq]: impact_fatigue },
+          },
+          distracting !== undefined && {
+            distracting: { [Op.eq]: distracting },
+          },
+          flow_impact !== undefined && {
+            flow_impact: { [Op.eq]: flow_impact },
+          },
+          comment !== undefined && { comment: { [Op.eq]: comment } },
+        ],
+      },
     });
+
     const maxPageCount = Math.ceil(totalNoOfSurveys / no_of_surveys);
+
     return res.status(200).json({
       endOfDaySurveys,
       totalNoOfSurveys,
-      maxPageCount,
       isSuccess: true,
+      maxPageCount,
     });
   } catch (err) {
-    return res.status(500).json({ message: err, isSuccess: false });
+    return res.status(500).json({ message: err.message, isSuccess: false });
   }
 };
 

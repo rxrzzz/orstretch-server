@@ -1,4 +1,5 @@
 require("dotenv").config({ path: "../.env" });
+const Op = require("sequelize").Op;
 const axios = require("axios");
 const moment = require("moment");
 const BaselineSurvey = require("../models/model").baseline_survey;
@@ -89,15 +90,158 @@ const getBaselineSurveys = async (req, res) => {
   try {
     let page_no = 1;
     let no_of_surveys = 10;
+    let order = req.query.order ?? "DESC";
+    let sortBy = req.query.sortBy ?? "createdAt";
+
+    let userid = req.query.userid;
+    let pain_open_surgery = req.query.pain_open_surgery;
+    let pain_laparoscopic_surgery = req.query.pain_laparoscopic_surgery;
+    let pain_robotic_surgery = req.query.pain_robotic_surgery;
+    let pain_past_six_months = req.query.pain_past_six_months;
+    let pain_interfered_relations = req.query.pain_interfered_relations;
+    let pain_interfered_sleep = req.query.pain_interfered_sleep;
+    let height = req.query.height;
+    let age = req.query.age;
+    let gender = req.query.gender;
+    let handness = req.query.handness;
+    let glove_size = req.query.glove_size;
+    let surgical_procedures_day = req.query.surgical_procedures_day;
+    let days_per_week = req.query.days_per_week;
+    let exercise = req.query.exercise;
+    let primary_speciality = req.query.primary_speciality;
+    let years_open_surgery = req.query.years_open_surgery;
+    let years_laparoscopic_surgery = req.query.years_laparoscopic_surgery;
+    let years_robotic_surgery = req.query.years_robotic_surgery;
+    let most_common_procedures_a = req.query.most_common_procedures_a;
+    let most_common_procedures_b = req.query.most_common_procedures_b;
+    let most_common_procedures_c = req.query.most_common_procedures_c;
 
     if (req.query.page_no) {
       page_no = Number(req.query.page_no) ?? 1;
     }
+
     if (req.query.no_of_surveys) {
       no_of_surveys = Number(req.query.no_of_surveys) ?? 10;
     }
+
     const offset = (page_no - 1) * no_of_surveys;
-    const totalNoOfSurveys = await BaselineSurvey.count();
+
+    const totalNoOfSurveys = await BaselineSurvey.count({
+      where: {
+        [Op.and]: [
+          userid !== undefined && {
+            userid: {
+              [Op.eq]: userid,
+            },
+          },
+          pain_open_surgery !== undefined && {
+            pain_open_surgery: {
+              [Op.eq]: pain_open_surgery,
+            },
+          },
+          pain_laparoscopic_surgery !== undefined && {
+            pain_laparoscopic_surgery: {
+              [Op.eq]: pain_laparoscopic_surgery,
+            },
+          },
+          pain_robotic_surgery !== undefined && {
+            pain_robotic_surgery: {
+              [Op.eq]: pain_robotic_surgery,
+            },
+          },
+          pain_past_six_months !== undefined && {
+            pain_past_six_months: {
+              [Op.eq]: pain_past_six_months,
+            },
+          },
+          pain_interfered_relations !== undefined && {
+            pain_interfered_relations: {
+              [Op.eq]: pain_interfered_relations,
+            },
+          },
+          pain_interfered_sleep !== undefined && {
+            pain_interfered_sleep: {
+              [Op.eq]: pain_interfered_sleep,
+            },
+          },
+          height !== undefined && {
+            height: {
+              [Op.eq]: height,
+            },
+          },
+          age !== undefined && {
+            age: {
+              [Op.eq]: age,
+            },
+          },
+          gender !== undefined && {
+            gender: {
+              [Op.eq]: gender,
+            },
+          },
+          handness !== undefined && {
+            handness: {
+              [Op.eq]: handness,
+            },
+          },
+          glove_size !== undefined && {
+            glove_size: {
+              [Op.eq]: glove_size,
+            },
+          },
+          surgical_procedures_day !== undefined && {
+            surgical_procedures_day: {
+              [Op.eq]: surgical_procedures_day,
+            },
+          },
+          days_per_week !== undefined && {
+            days_per_week: {
+              [Op.eq]: days_per_week,
+            },
+          },
+          exercise !== undefined && {
+            exercise: {
+              [Op.eq]: exercise,
+            },
+          },
+          primary_speciality !== undefined && {
+            primary_speciality: {
+              [Op.eq]: primary_speciality,
+            },
+          },
+          years_open_surgery !== undefined && {
+            years_open_surgery: {
+              [Op.eq]: years_open_surgery,
+            },
+          },
+          years_laparoscopic_surgery !== undefined && {
+            years_laparoscopic_surgery: {
+              [Op.eq]: years_laparoscopic_surgery,
+            },
+          },
+          years_robotic_surgery !== undefined && {
+            years_robotic_surgery: {
+              [Op.eq]: years_robotic_surgery,
+            },
+          },
+          most_common_procedures_a !== undefined && {
+            most_common_procedures_a: {
+              [Op.eq]: most_common_procedures_a,
+            },
+          },
+          most_common_procedures_b !== undefined && {
+            most_common_procedures_b: {
+              [Op.eq]: most_common_procedures_b,
+            },
+          },
+          most_common_procedures_c !== undefined && {
+            most_common_procedures_c: {
+              [Op.eq]: most_common_procedures_c,
+            },
+          },
+        ],
+      },
+    });
 
     if (isNaN(page_no) || page_no <= 0) {
       return res.status(400).json({
@@ -110,9 +254,125 @@ const getBaselineSurveys = async (req, res) => {
     const baselineSurveys = await BaselineSurvey.findAll({
       offset,
       limit: no_of_surveys,
-      order: [["createdAt", "DESC"]],
+      order: [[sortBy, order]],
+      where: {
+        [Op.and]: [
+          userid !== undefined && {
+            userid: {
+              [Op.eq]: userid,
+            },
+          },
+          pain_open_surgery !== undefined && {
+            pain_open_surgery: {
+              [Op.eq]: pain_open_surgery,
+            },
+          },
+          pain_laparoscopic_surgery !== undefined && {
+            pain_laparoscopic_surgery: {
+              [Op.eq]: pain_laparoscopic_surgery,
+            },
+          },
+          pain_robotic_surgery !== undefined && {
+            pain_robotic_surgery: {
+              [Op.eq]: pain_robotic_surgery,
+            },
+          },
+          pain_past_six_months !== undefined && {
+            pain_past_six_months: {
+              [Op.eq]: pain_past_six_months,
+            },
+          },
+          pain_interfered_relations !== undefined && {
+            pain_interfered_relations: {
+              [Op.eq]: pain_interfered_relations,
+            },
+          },
+          pain_interfered_sleep !== undefined && {
+            pain_interfered_sleep: {
+              [Op.eq]: pain_interfered_sleep,
+            },
+          },
+          height !== undefined && {
+            height: {
+              [Op.eq]: height,
+            },
+          },
+          age !== undefined && {
+            age: {
+              [Op.eq]: age,
+            },
+          },
+          gender !== undefined && {
+            gender: {
+              [Op.eq]: gender,
+            },
+          },
+          handness !== undefined && {
+            handness: {
+              [Op.eq]: handness,
+            },
+          },
+          glove_size !== undefined && {
+            glove_size: {
+              [Op.eq]: glove_size,
+            },
+          },
+          surgical_procedures_day !== undefined && {
+            surgical_procedures_day: {
+              [Op.eq]: surgical_procedures_day,
+            },
+          },
+          days_per_week !== undefined && {
+            days_per_week: {
+              [Op.eq]: days_per_week,
+            },
+          },
+          exercise !== undefined && {
+            exercise: {
+              [Op.eq]: exercise,
+            },
+          },
+          primary_speciality !== undefined && {
+            primary_speciality: {
+              [Op.eq]: primary_speciality,
+            },
+          },
+          years_open_surgery !== undefined && {
+            years_open_surgery: {
+              [Op.eq]: years_open_surgery,
+            },
+          },
+          years_laparoscopic_surgery !== undefined && {
+            years_laparoscopic_surgery: {
+              [Op.eq]: years_laparoscopic_surgery,
+            },
+          },
+          years_robotic_surgery !== undefined && {
+            years_robotic_surgery: {
+              [Op.eq]: years_robotic_surgery,
+            },
+          },
+          most_common_procedures_a !== undefined && {
+            most_common_procedures_a: {
+              [Op.eq]: most_common_procedures_a,
+            },
+          },
+          most_common_procedures_b !== undefined && {
+            most_common_procedures_b: {
+              [Op.eq]: most_common_procedures_b,
+            },
+          },
+          most_common_procedures_c !== undefined && {
+            most_common_procedures_c: {
+              [Op.eq]: most_common_procedures_c,
+            },
+          },
+        ],
+      },
     });
+
     const maxPageCount = Math.ceil(totalNoOfSurveys / no_of_surveys);
+
     return res.status(200).json({
       baselineSurveys,
       totalNoOfSurveys,
@@ -120,9 +380,11 @@ const getBaselineSurveys = async (req, res) => {
       maxPageCount,
     });
   } catch (err) {
-    return res.status(500).json({ message: err, isSuccess: false });
+    return res.status(500).json({ message: err.message, isSuccess: false });
   }
 };
+
+module.exports = { getBaselineSurveys };
 
 const exportBaselineSurveys = async (req, res) => {
   try {
