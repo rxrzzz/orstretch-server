@@ -141,41 +141,63 @@ const getEndOfDaySurveys = async (req, res) => {
       where: {
         [Op.and]: [
           day !== undefined && { day: { [Op.eq]: day } },
-          mentaly_demanding_surgeries !== undefined && {
-            mentaly_demanding_surgeries: {
-              [Op.eq]: mentaly_demanding_surgeries,
+
+          mentaly_demanding_surgeries !== undefined &&
+            mentaly_demanding_surgeries !== "" && {
+              mentaly_demanding_surgeries: {
+                [Op.eq]: mentaly_demanding_surgeries,
+              },
             },
-          },
-          physically_demanding_surgeries !== undefined && {
-            physically_demanding_surgeries: {
-              [Op.eq]: physically_demanding_surgeries,
+
+          physically_demanding_surgeries !== undefined &&
+            physically_demanding_surgeries !== "" && {
+              physically_demanding_surgeries: {
+                [Op.eq]: physically_demanding_surgeries,
+              },
             },
-          },
-          complex_surgeries !== undefined && {
-            complex_surgeries: { [Op.eq]: complex_surgeries },
-          },
-          difficult_surgeries !== undefined && {
-            difficult_surgeries: { [Op.eq]: difficult_surgeries },
-          },
-          impact_physical !== undefined && {
-            impact_physical: { [Op.eq]: impact_physical },
-          },
-          impact_mental !== undefined && {
-            impact_mental: { [Op.eq]: impact_mental },
-          },
-          impact_pain !== undefined && {
-            impact_pain: { [Op.eq]: impact_pain },
-          },
-          impact_fatigue !== undefined && {
-            impact_fatigue: { [Op.eq]: impact_fatigue },
-          },
-          distracting !== undefined && {
-            distracting: { [Op.eq]: distracting },
-          },
-          flow_impact !== undefined && {
-            flow_impact: { [Op.eq]: flow_impact },
-          },
-          comment !== undefined && { comment: { [Op.eq]: comment } },
+
+          complex_surgeries !== undefined &&
+            complex_surgeries !== "" && {
+              complex_surgeries: { [Op.eq]: complex_surgeries },
+            },
+
+          difficult_surgeries !== undefined &&
+            difficult_surgeries !== "" && {
+              difficult_surgeries: { [Op.eq]: difficult_surgeries },
+            },
+
+          impact_physical !== undefined &&
+            impact_physical !== "" && {
+              impact_physical: { [Op.eq]: impact_physical },
+            },
+
+          impact_mental !== undefined &&
+            impact_mental !== "" && {
+              impact_mental: { [Op.eq]: impact_mental },
+            },
+
+          impact_pain !== undefined &&
+            impact_pain !== "" && {
+              impact_pain: { [Op.eq]: impact_pain },
+            },
+
+          impact_fatigue !== undefined &&
+            impact_fatigue !== "" && {
+              impact_fatigue: { [Op.eq]: impact_fatigue },
+            },
+
+          distracting !== undefined &&
+            distracting !== "" && {
+              distracting: { [Op.eq]: distracting },
+            },
+
+          flow_impact !== undefined &&
+            flow_impact !== "" && {
+              flow_impact: { [Op.eq]: flow_impact },
+            },
+
+          comment !== undefined &&
+            comment !== "" && { comment: { [Op.eq]: comment } },
         ],
       },
     });
@@ -187,41 +209,63 @@ const getEndOfDaySurveys = async (req, res) => {
       where: {
         [Op.and]: [
           day !== undefined && { day: { [Op.eq]: day } },
-          mentaly_demanding_surgeries !== undefined && {
-            mentaly_demanding_surgeries: {
-              [Op.eq]: mentaly_demanding_surgeries,
+
+          mentaly_demanding_surgeries !== undefined &&
+            mentaly_demanding_surgeries !== "" && {
+              mentaly_demanding_surgeries: {
+                [Op.eq]: mentaly_demanding_surgeries,
+              },
             },
-          },
-          physically_demanding_surgeries !== undefined && {
-            physically_demanding_surgeries: {
-              [Op.eq]: physically_demanding_surgeries,
+
+          physically_demanding_surgeries !== undefined &&
+            physically_demanding_surgeries !== "" && {
+              physically_demanding_surgeries: {
+                [Op.eq]: physically_demanding_surgeries,
+              },
             },
-          },
-          complex_surgeries !== undefined && {
-            complex_surgeries: { [Op.eq]: complex_surgeries },
-          },
-          difficult_surgeries !== undefined && {
-            difficult_surgeries: { [Op.eq]: difficult_surgeries },
-          },
-          impact_physical !== undefined && {
-            impact_physical: { [Op.eq]: impact_physical },
-          },
-          impact_mental !== undefined && {
-            impact_mental: { [Op.eq]: impact_mental },
-          },
-          impact_pain !== undefined && {
-            impact_pain: { [Op.eq]: impact_pain },
-          },
-          impact_fatigue !== undefined && {
-            impact_fatigue: { [Op.eq]: impact_fatigue },
-          },
-          distracting !== undefined && {
-            distracting: { [Op.eq]: distracting },
-          },
-          flow_impact !== undefined && {
-            flow_impact: { [Op.eq]: flow_impact },
-          },
-          comment !== undefined && { comment: { [Op.eq]: comment } },
+
+          complex_surgeries !== undefined &&
+            complex_surgeries !== "" && {
+              complex_surgeries: { [Op.eq]: complex_surgeries },
+            },
+
+          difficult_surgeries !== undefined &&
+            difficult_surgeries !== "" && {
+              difficult_surgeries: { [Op.eq]: difficult_surgeries },
+            },
+
+          impact_physical !== undefined &&
+            impact_physical !== "" && {
+              impact_physical: { [Op.eq]: impact_physical },
+            },
+
+          impact_mental !== undefined &&
+            impact_mental !== "" && {
+              impact_mental: { [Op.eq]: impact_mental },
+            },
+
+          impact_pain !== undefined &&
+            impact_pain !== "" && {
+              impact_pain: { [Op.eq]: impact_pain },
+            },
+
+          impact_fatigue !== undefined &&
+            impact_fatigue !== "" && {
+              impact_fatigue: { [Op.eq]: impact_fatigue },
+            },
+
+          distracting !== undefined &&
+            distracting !== "" && {
+              distracting: { [Op.eq]: distracting },
+            },
+
+          flow_impact !== undefined &&
+            flow_impact !== "" && {
+              flow_impact: { [Op.eq]: flow_impact },
+            },
+
+          comment !== undefined &&
+            comment !== "" && { comment: { [Op.eq]: comment } },
         ],
       },
     });

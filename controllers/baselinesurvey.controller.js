@@ -134,111 +134,153 @@ const getBaselineSurveys = async (req, res) => {
               [Op.eq]: userid,
             },
           },
-          pain_open_surgery !== undefined && {
-            pain_open_surgery: {
-              [Op.eq]: pain_open_surgery,
+
+          pain_open_surgery !== undefined &&
+            pain_open_surgery !== "" && {
+              pain_open_surgery: {
+                [Op.eq]: pain_open_surgery,
+              },
             },
-          },
-          pain_laparoscopic_surgery !== undefined && {
-            pain_laparoscopic_surgery: {
-              [Op.eq]: pain_laparoscopic_surgery,
+
+          pain_laparoscopic_surgery !== undefined &&
+            pain_laparoscopic_surgery !== "" && {
+              pain_laparoscopic_surgery: {
+                [Op.eq]: pain_laparoscopic_surgery,
+              },
             },
-          },
-          pain_robotic_surgery !== undefined && {
-            pain_robotic_surgery: {
-              [Op.eq]: pain_robotic_surgery,
+
+          pain_robotic_surgery !== undefined &&
+            pain_robotic_surgery !== "" && {
+              pain_robotic_surgery: {
+                [Op.eq]: pain_robotic_surgery,
+              },
             },
-          },
-          pain_past_six_months !== undefined && {
-            pain_past_six_months: {
-              [Op.eq]: pain_past_six_months,
+
+          pain_past_six_months !== undefined &&
+            pain_past_six_months !== "" && {
+              pain_past_six_months: {
+                [Op.eq]: pain_past_six_months,
+              },
             },
-          },
-          pain_interfered_relations !== undefined && {
-            pain_interfered_relations: {
-              [Op.eq]: pain_interfered_relations,
+
+          pain_interfered_relations !== undefined &&
+            pain_interfered_relations !== "" && {
+              pain_interfered_relations: {
+                [Op.eq]: pain_interfered_relations,
+              },
             },
-          },
-          pain_interfered_sleep !== undefined && {
-            pain_interfered_sleep: {
-              [Op.eq]: pain_interfered_sleep,
+
+          pain_interfered_sleep !== undefined &&
+            pain_interfered_sleep !== "" && {
+              pain_interfered_sleep: {
+                [Op.eq]: pain_interfered_sleep,
+              },
             },
-          },
-          height !== undefined && {
-            height: {
-              [Op.eq]: height,
+
+          height !== undefined &&
+            height !== "" && {
+              height: {
+                [Op.eq]: height,
+              },
             },
-          },
-          age !== undefined && {
-            age: {
-              [Op.eq]: age,
+
+          age !== undefined &&
+            age !== "" && {
+              age: {
+                [Op.eq]: age,
+              },
             },
-          },
-          gender !== undefined && {
-            gender: {
-              [Op.eq]: gender,
+
+          gender !== undefined &&
+            gender !== "" && {
+              gender: {
+                [Op.eq]: gender,
+              },
             },
-          },
-          handness !== undefined && {
-            handness: {
-              [Op.eq]: handness,
+
+          handness !== undefined &&
+            handness !== "" && {
+              handness: {
+                [Op.eq]: handness,
+              },
             },
-          },
-          glove_size !== undefined && {
-            glove_size: {
-              [Op.eq]: glove_size,
+
+          glove_size !== undefined &&
+            glove_size !== "" && {
+              glove_size: {
+                [Op.eq]: glove_size,
+              },
             },
-          },
-          surgical_procedures_day !== undefined && {
-            surgical_procedures_day: {
-              [Op.eq]: surgical_procedures_day,
+
+          surgical_procedures_day !== undefined &&
+            surgical_procedures_day !== "" && {
+              surgical_procedures_day: {
+                [Op.eq]: surgical_procedures_day,
+              },
             },
-          },
-          days_per_week !== undefined && {
-            days_per_week: {
-              [Op.eq]: days_per_week,
+
+          days_per_week !== undefined &&
+            days_per_week !== "" && {
+              days_per_week: {
+                [Op.eq]: days_per_week,
+              },
             },
-          },
-          exercise !== undefined && {
-            exercise: {
-              [Op.eq]: exercise,
+
+          exercise !== undefined &&
+            exercise !== "" && {
+              exercise: {
+                [Op.eq]: exercise,
+              },
             },
-          },
-          primary_speciality !== undefined && {
-            primary_speciality: {
-              [Op.eq]: primary_speciality,
+
+          primary_speciality !== undefined &&
+            primary_speciality !== "" && {
+              primary_speciality: {
+                [Op.eq]: primary_speciality,
+              },
             },
-          },
-          years_open_surgery !== undefined && {
-            years_open_surgery: {
-              [Op.eq]: years_open_surgery,
+
+          years_open_surgery !== undefined &&
+            years_open_surgery !== "" && {
+              years_open_surgery: {
+                [Op.eq]: years_open_surgery,
+              },
             },
-          },
-          years_laparoscopic_surgery !== undefined && {
-            years_laparoscopic_surgery: {
-              [Op.eq]: years_laparoscopic_surgery,
+
+          years_laparoscopic_surgery !== undefined &&
+            years_laparoscopic_surgery !== "" && {
+              years_laparoscopic_surgery: {
+                [Op.eq]: years_laparoscopic_surgery,
+              },
             },
-          },
-          years_robotic_surgery !== undefined && {
-            years_robotic_surgery: {
-              [Op.eq]: years_robotic_surgery,
+
+          years_robotic_surgery !== undefined &&
+            years_robotic_surgery !== "" && {
+              years_robotic_surgery: {
+                [Op.eq]: years_robotic_surgery,
+              },
             },
-          },
-          most_common_procedures_a !== undefined && {
-            most_common_procedures_a: {
-              [Op.eq]: most_common_procedures_a,
+
+          most_common_procedures_a !== undefined &&
+            most_common_procedures_a !== "" && {
+              most_common_procedures_a: {
+                [Op.eq]: most_common_procedures_a,
+              },
             },
-          },
-          most_common_procedures_b !== undefined && {
-            most_common_procedures_b: {
-              [Op.eq]: most_common_procedures_b,
+
+          most_common_procedures_b !== undefined &&
+            most_common_procedures_b !== "" && {
+              most_common_procedures_b: {
+                [Op.eq]: most_common_procedures_b,
+              },
             },
-          },
-          most_common_procedures_c !== undefined && {
-            most_common_procedures_c: {
-              [Op.eq]: most_common_procedures_c,
+
+          most_common_procedures_c !== undefined &&
+            most_common_procedures_c !== "" && {
+              most_common_procedures_c: {
+                [Op.eq]: most_common_procedures_c,
+              },
             },
-          },
         ],
       },
     });
@@ -262,111 +304,153 @@ const getBaselineSurveys = async (req, res) => {
               [Op.eq]: userid,
             },
           },
-          pain_open_surgery !== undefined && {
-            pain_open_surgery: {
-              [Op.eq]: pain_open_surgery,
+
+          pain_open_surgery !== undefined &&
+            pain_open_surgery !== "" && {
+              pain_open_surgery: {
+                [Op.eq]: pain_open_surgery,
+              },
             },
-          },
-          pain_laparoscopic_surgery !== undefined && {
-            pain_laparoscopic_surgery: {
-              [Op.eq]: pain_laparoscopic_surgery,
+
+          pain_laparoscopic_surgery !== undefined &&
+            pain_laparoscopic_surgery !== "" && {
+              pain_laparoscopic_surgery: {
+                [Op.eq]: pain_laparoscopic_surgery,
+              },
             },
-          },
-          pain_robotic_surgery !== undefined && {
-            pain_robotic_surgery: {
-              [Op.eq]: pain_robotic_surgery,
+
+          pain_robotic_surgery !== undefined &&
+            pain_robotic_surgery !== "" && {
+              pain_robotic_surgery: {
+                [Op.eq]: pain_robotic_surgery,
+              },
             },
-          },
-          pain_past_six_months !== undefined && {
-            pain_past_six_months: {
-              [Op.eq]: pain_past_six_months,
+
+          pain_past_six_months !== undefined &&
+            pain_past_six_months !== "" && {
+              pain_past_six_months: {
+                [Op.eq]: pain_past_six_months,
+              },
             },
-          },
-          pain_interfered_relations !== undefined && {
-            pain_interfered_relations: {
-              [Op.eq]: pain_interfered_relations,
+
+          pain_interfered_relations !== undefined &&
+            pain_interfered_relations !== "" && {
+              pain_interfered_relations: {
+                [Op.eq]: pain_interfered_relations,
+              },
             },
-          },
-          pain_interfered_sleep !== undefined && {
-            pain_interfered_sleep: {
-              [Op.eq]: pain_interfered_sleep,
+
+          pain_interfered_sleep !== undefined &&
+            pain_interfered_sleep !== "" && {
+              pain_interfered_sleep: {
+                [Op.eq]: pain_interfered_sleep,
+              },
             },
-          },
-          height !== undefined && {
-            height: {
-              [Op.eq]: height,
+
+          height !== undefined &&
+            height !== "" && {
+              height: {
+                [Op.eq]: height,
+              },
             },
-          },
-          age !== undefined && {
-            age: {
-              [Op.eq]: age,
+
+          age !== undefined &&
+            age !== "" && {
+              age: {
+                [Op.eq]: age,
+              },
             },
-          },
-          gender !== undefined && {
-            gender: {
-              [Op.eq]: gender,
+
+          gender !== undefined &&
+            gender !== "" && {
+              gender: {
+                [Op.eq]: gender,
+              },
             },
-          },
-          handness !== undefined && {
-            handness: {
-              [Op.eq]: handness,
+
+          handness !== undefined &&
+            handness !== "" && {
+              handness: {
+                [Op.eq]: handness,
+              },
             },
-          },
-          glove_size !== undefined && {
-            glove_size: {
-              [Op.eq]: glove_size,
+
+          glove_size !== undefined &&
+            glove_size !== "" && {
+              glove_size: {
+                [Op.eq]: glove_size,
+              },
             },
-          },
-          surgical_procedures_day !== undefined && {
-            surgical_procedures_day: {
-              [Op.eq]: surgical_procedures_day,
+
+          surgical_procedures_day !== undefined &&
+            surgical_procedures_day !== "" && {
+              surgical_procedures_day: {
+                [Op.eq]: surgical_procedures_day,
+              },
             },
-          },
-          days_per_week !== undefined && {
-            days_per_week: {
-              [Op.eq]: days_per_week,
+
+          days_per_week !== undefined &&
+            days_per_week !== "" && {
+              days_per_week: {
+                [Op.eq]: days_per_week,
+              },
             },
-          },
-          exercise !== undefined && {
-            exercise: {
-              [Op.eq]: exercise,
+
+          exercise !== undefined &&
+            exercise !== "" && {
+              exercise: {
+                [Op.eq]: exercise,
+              },
             },
-          },
-          primary_speciality !== undefined && {
-            primary_speciality: {
-              [Op.eq]: primary_speciality,
+
+          primary_speciality !== undefined &&
+            primary_speciality !== "" && {
+              primary_speciality: {
+                [Op.eq]: primary_speciality,
+              },
             },
-          },
-          years_open_surgery !== undefined && {
-            years_open_surgery: {
-              [Op.eq]: years_open_surgery,
+
+          years_open_surgery !== undefined &&
+            years_open_surgery !== "" && {
+              years_open_surgery: {
+                [Op.eq]: years_open_surgery,
+              },
             },
-          },
-          years_laparoscopic_surgery !== undefined && {
-            years_laparoscopic_surgery: {
-              [Op.eq]: years_laparoscopic_surgery,
+
+          years_laparoscopic_surgery !== undefined &&
+            years_laparoscopic_surgery !== "" && {
+              years_laparoscopic_surgery: {
+                [Op.eq]: years_laparoscopic_surgery,
+              },
             },
-          },
-          years_robotic_surgery !== undefined && {
-            years_robotic_surgery: {
-              [Op.eq]: years_robotic_surgery,
+
+          years_robotic_surgery !== undefined &&
+            years_robotic_surgery !== "" && {
+              years_robotic_surgery: {
+                [Op.eq]: years_robotic_surgery,
+              },
             },
-          },
-          most_common_procedures_a !== undefined && {
-            most_common_procedures_a: {
-              [Op.eq]: most_common_procedures_a,
+
+          most_common_procedures_a !== undefined &&
+            most_common_procedures_a !== "" && {
+              most_common_procedures_a: {
+                [Op.eq]: most_common_procedures_a,
+              },
             },
-          },
-          most_common_procedures_b !== undefined && {
-            most_common_procedures_b: {
-              [Op.eq]: most_common_procedures_b,
+
+          most_common_procedures_b !== undefined &&
+            most_common_procedures_b !== "" && {
+              most_common_procedures_b: {
+                [Op.eq]: most_common_procedures_b,
+              },
             },
-          },
-          most_common_procedures_c !== undefined && {
-            most_common_procedures_c: {
-              [Op.eq]: most_common_procedures_c,
+
+          most_common_procedures_c !== undefined &&
+            most_common_procedures_c !== "" && {
+              most_common_procedures_c: {
+                [Op.eq]: most_common_procedures_c,
+              },
             },
-          },
         ],
       },
     });
