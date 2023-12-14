@@ -100,7 +100,7 @@ const exportEndOfDaySurveys = async (req, res) => {
 
 const getEndOfDaySurveys = async (req, res) => {
   try {
-    let page_no = 1;
+    let page_no = req.query.page_no || 1;
     let no_of_surveys = 10;
     let order = req.query.order ?? "DESC";
     let sortBy = req.query.sortBy ?? "createdAt";
@@ -140,8 +140,7 @@ const getEndOfDaySurveys = async (req, res) => {
     const totalNoOfSurveys = await EndOfDaySurvey.count({
       where: {
         [Op.and]: [
-          day !== undefined && { day: { [Op.eq]: day } },
-
+          day !== undefined && day != "" && { day: { [Op.eq]: day } },
           mentaly_demanding_surgeries !== undefined &&
             mentaly_demanding_surgeries !== "" && {
               mentaly_demanding_surgeries: {
@@ -208,7 +207,7 @@ const getEndOfDaySurveys = async (req, res) => {
       order: [[sortBy, order]],
       where: {
         [Op.and]: [
-          day !== undefined && { day: { [Op.eq]: day } },
+          day !== undefined && day != "" && { day: { [Op.eq]: day } },
 
           mentaly_demanding_surgeries !== undefined &&
             mentaly_demanding_surgeries !== "" && {

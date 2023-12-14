@@ -468,8 +468,6 @@ const getBaselineSurveys = async (req, res) => {
   }
 };
 
-module.exports = { getBaselineSurveys };
-
 const exportBaselineSurveys = async (req, res) => {
   try {
     const idArray = req.query.ids;
