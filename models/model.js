@@ -31,7 +31,7 @@ db.links = require("./link.js")(sequelize, DataTypes);
 db.baseline_survey = require("./baseline_survey.js")(sequelize, DataTypes);
 db.endofday_survey = require("./endofday_survey.js")(sequelize, DataTypes);
 db.user_tags = require("./user_tags.js")(sequelize, DataTypes);
-
+db.user_otps = require("./user_otp.js")(sequelize, DataTypes)
 db.users.hasMany(db.events, {
   foreignKey: "userid",
   as: "event",

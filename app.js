@@ -2,7 +2,7 @@ const express = require("express");
 const createError = require("http-errors");
 const morgan = require("morgan");
 require("dotenv").config();
-
+const verifyToken = require("./middleware/verifyToken");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -10,6 +10,8 @@ app.use(morgan("dev"));
 
 const accountRouter = require("./routes/account.route");
 app.use("/api/accounts", accountRouter);
+
+// app.use(verifyToken);
 
 const userRouter = require("./routes/user.route");
 app.use("/api/users", userRouter);

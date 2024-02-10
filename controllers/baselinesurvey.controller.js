@@ -43,9 +43,20 @@ const sendEmail = async (req, res) => {
 
 const triggerBaselineSurveyJSONWorkflow = async (req, res) => {
   try {
+    const email = req.body.email;
+    const firstname = req.body.firstName;
+    const lastname = req.body.lastName;
+
     const response = await axios.post(
       `https://iad1.qualtrics.com/inbound-event/v1/events/json/triggers?urlTokenId=${process.env.QUALTRICS_BASELINE_URLTOKENID}&force_isolation=true`,
-      { data: req.body }
+      { email, firstname, lastname },
+      {
+        proxy: {
+          protocol: "https",
+          host: "mcproxy-swg.mayo.edu",
+          port: 3128,
+        },
+      }
     );
 
     if (response.data.meta.httpStatus) {
@@ -72,11 +83,13 @@ const getSurveyResponses = async (req, res) => {
   try {
     await sftp.connect(config);
     const files = await sftp.list(filePath);
-    const fileInfo = JSON.stringify(files);
-    if (files && files.length > 0) {
-      return res.status(200).json(JSON.parse(fileInfo));
+    const jsonfile = files.filter((file) => file.name.endsWith(".json"))[2  ];
+    if (jsonfile) {
+      const fileContent = await sftp.get(`${filePath}/${jsonfile.name}`);
+      const jsonData = JSON.parse(fileContent.toString());
+      return res.status(200).json(jsonData);
     } else {
-      return res.status(500).json({ m: "error" });
+      return res.status(404).json({ message: "No JSON files found." });
     }
   } catch (err) {
     console.error(err);

@@ -14,4 +14,6 @@ router.get(
   userController.exportUserWithBaselineSurveys
 );
 router.post("/changeUserPassword", userController.changeUserPassword);
+router.post("/sendOTP", userController.sendOTP);
+router.post("/verifyOTP", userController.verifyOTP)
 module.exports = router;

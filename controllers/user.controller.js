@@ -1,10 +1,12 @@
 const db = require("../models/model");
 const User = db.users;
+const UserOtps = db.user_otps;
 const BaselineSurvey = require("../models/model").baseline_survey;
 const Event = require("../models/model").events;
 const excelJs = require("exceljs");
 const Op = require("sequelize").Op;
 const moment = require("moment");
+const nodeMailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 
 const hashPassword = async (password) => {
@@ -89,6 +91,7 @@ const addUser = async (req, res) => {
       active: 1,
       frequency: 1,
       surveys_number: 10,
+      is_verified: false,
       days_number: 5,
       deleted: 0,
       baseline_survey: 0,
@@ -282,47 +285,47 @@ const listUsers = async (req, res) => {
         where: {
           [Op.and]: [
             startDate !== undefined &&
-              startDate !== "" && {
-                createdAt: {
-                  [Op.gte]: startDate,
-                },
+            startDate !== "" && {
+              createdAt: {
+                [Op.gte]: startDate,
               },
+            },
             endDate !== undefined &&
-              endDate !== "" && {
-                updatedAt: {
-                  [Op.lte]: endDate,
-                },
+            endDate !== "" && {
+              updatedAt: {
+                [Op.lte]: endDate,
               },
+            },
             id !== undefined &&
-              id !== "" && {
-                id: {
-                  [Op.eq]: Number(id),
-                },
+            id !== "" && {
+              id: {
+                [Op.eq]: Number(id),
               },
+            },
             email !== undefined &&
-              email !== "" && {
-                email: {
-                  [Op.substring]: email,
-                },
+            email !== "" && {
+              email: {
+                [Op.substring]: email,
               },
+            },
             name !== undefined &&
-              name !== "" && {
-                name: {
-                  [Op.substring]: name,
-                },
+            name !== "" && {
+              name: {
+                [Op.substring]: name,
               },
+            },
             timer !== undefined &&
-              timer !== "" && {
-                conf_timer: {
-                  [Op.eq]: Number(timer),
-                },
+            timer !== "" && {
+              conf_timer: {
+                [Op.eq]: Number(timer),
               },
+            },
             tags !== undefined &&
-              tags !== "" && {
-                tags_excel: {
-                  [Op.substring]: tags,
-                },
+            tags !== "" && {
+              tags_excel: {
+                [Op.substring]: tags,
               },
+            },
           ],
         },
       });
@@ -333,47 +336,47 @@ const listUsers = async (req, res) => {
         where: {
           [Op.and]: [
             startDate !== undefined &&
-              startDate !== "" && {
-                createdAt: {
-                  [Op.gte]: startDate,
-                },
+            startDate !== "" && {
+              createdAt: {
+                [Op.gte]: startDate,
               },
+            },
             endDate !== undefined &&
-              endDate !== "" && {
-                updatedAt: {
-                  [Op.lte]: endDate,
-                },
+            endDate !== "" && {
+              updatedAt: {
+                [Op.lte]: endDate,
               },
+            },
             id !== undefined &&
-              id !== "" && {
-                id: {
-                  [Op.eq]: Number(id),
-                },
+            id !== "" && {
+              id: {
+                [Op.eq]: Number(id),
               },
+            },
             email !== undefined &&
-              email !== "" && {
-                email: {
-                  [Op.substring]: email,
-                },
+            email !== "" && {
+              email: {
+                [Op.substring]: email,
               },
+            },
             name !== undefined &&
-              name !== "" && {
-                name: {
-                  [Op.substring]: name,
-                },
+            name !== "" && {
+              name: {
+                [Op.substring]: name,
               },
+            },
             timer !== undefined &&
-              timer !== "" && {
-                conf_timer: {
-                  [Op.eq]: Number(timer),
-                },
+            timer !== "" && {
+              conf_timer: {
+                [Op.eq]: Number(timer),
               },
+            },
             tags !== undefined &&
-              tags !== "" && {
-                tags_excel: {
-                  [Op.substring]: tags,
-                },
+            tags !== "" && {
+              tags_excel: {
+                [Op.substring]: tags,
               },
+            },
           ],
         },
         include: [{ model: Event, as: "event" }],
@@ -612,6 +615,61 @@ const exportUserWithBaselineSurveys = async (req, res) => {
   }
 };
 
+
+
+const sendOTP = async (req, res) => {
+  const [id, email] = [req.body.userId, req.body.email]
+  try {
+    const user = await User.find({ where: { email } })
+    if (user.is_verified === true) {
+      return res.status(400).json({ message: "User is already verified", isSuccess: false })
+    }
+    const otp = `${Math.floor((Math.random() * 9000)) + 1000}`
+    const userOtp = await UserOtps.create({
+      userId: id,
+      expiresAt: Date.now() + 3600000,
+      otp: otp
+    })
+    return res.status(200).json({
+      otp: userOtp.otp
+    })
+
+  } catch (err) {
+    return res.status(500).json({ err })
+  }
+}
+
+const verifyOTP = async (req, res) => {
+  const [userId, otp] = [req.body.userId, req.body.otp]
+  try {
+    if (!userId || !otp) {
+      return res.status(400).json({ message: "User not found" })
+    }
+    const userVerificationRecord = await UserOtps.findAll({ where: { userId: userId } })
+    console.log(userVerificationRecord.length)
+    if (userVerificationRecord.length <= 0) {
+      return res.status(400).json({ message: "Account record does'nt exist or has been verified already. Please sign up or login." })
+    } else {
+      const { expiresAt } = userVerificationRecord[0]
+      const { otp: dbOtp } = userVerificationRecord[0]
+      if (expiresAt < Date.now()) {
+        await UserOtps.destroy({ userId })
+        return res.status(402).json({ message: "Otp has expired", isSuccess: false })
+      } else {
+        if (otp === dbOtp) {
+          await User.update({ is_verified: true }, { where: { id: userId } })
+          await UserOtps.destroy({ where: { userId: userId } })
+          return res.status(200).json({ message: "The email has been verified", isSuccess: true })
+        } else {
+          return res.status(402).json({ message: "Otp is incorrect", isSuccess: false })
+        }
+      }
+    }
+  } catch (err) {
+    return res.status(500).json({ err })
+  }
+}
+
 module.exports = {
   listUsers,
   deleteUser,
@@ -622,6 +680,8 @@ module.exports = {
   changeUserPassword,
   findUsers,
   exportUserWithBaselineSurveys,
+  sendOTP,
+  verifyOTP,
   searchUsers,
   exportUser,
 };

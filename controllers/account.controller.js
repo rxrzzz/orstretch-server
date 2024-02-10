@@ -1,5 +1,7 @@
 require("dotenv").config;
+const axios = require("axios")
 const db = require("../models/model");
+const sdk = require('api')('@sendchamp/v1.0#1bxhir2hkyyg62rn');
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -30,6 +32,7 @@ const comparePasswords = async (plainTextPassword, hash) => {
 };
 
 const generateToken = (id) => {
+  // @ts-ignore
   return jwt.sign({ id }, process.env.JWT_KEY, { expiresIn: "12h" });
 };
 
@@ -169,7 +172,22 @@ const loginAccount = async (req, res) => {
   }
 };
 
+
+const sendToken = async (req, res) => {
+  sdk.auth('Bearer sendchamp_live_$2a$10$GRdY0AGEX3wSmJTYfGkZ.eBowX7wckUiSnrGnXA5Ix0Q3bkBMorUO');
+  sdk.sendOtpApi({
+    channel: 'email',
+    token_type: 'numeric',
+    token_length: 6,
+    expiration_time: 10,
+    customer_email_address: 'adeleyetemiloluwa.work@gmail.com'
+  })
+    .then(({ data }) => console.log(data))
+    .catch(err => console.error(err));
+}
+
 module.exports = {
   loginAccount,
   loginAdminAccount,
+  sendToken
 };

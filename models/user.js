@@ -83,6 +83,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      is_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
+      }
     },
     { freezeTableName: true, tableName: "user" }
   );
