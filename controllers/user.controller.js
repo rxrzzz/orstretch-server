@@ -619,21 +619,18 @@ const exportUserWithBaselineSurveys = async (req, res) => {
 
 
 const sendOTP = async (req, res) => {
-  const [id, email] = [req.body.userId, req.body.email]
+  const [email] = [req.body.email]
   try {
-    console.log("yo")
     const user = await User.findOne({ where: { email } })
     if (user) {
       if (user.is_verified === true) {
         return res.status(400).json({ message: "User is already verified", isSuccess: false })
       }
-    } else {
-      return res.status(404).json({ message: `User with email "${email}" does not exist.` })
     }
 
     const otp = `${Math.floor((Math.random() * 900000)) + 100000}`
     const userOtp = await UserOtps.create({
-      userId: id,
+      email,
       expiresAt: Date.now() + 3600000,
       otp: otp
     })
@@ -673,25 +670,24 @@ const sendOTP = async (req, res) => {
 }
 
 const verifyOTP = async (req, res) => {
-  const [userId, otp] = [req.body.userId, req.body.otp]
+  const [email, otp] = [req.body.email, req.body.otp]
   try {
-    if (!userId || !otp) {
+    if (!email || !otp) {
       return res.status(400).json({ message: "User not found" })
     }
-    const userVerificationRecord = await UserOtps.findAll({ where: { userId: userId } })
-    console.log(userVerificationRecord.length)
+    const userVerificationRecord = await UserOtps.findAll({ where: { email } })
+
     if (userVerificationRecord.length <= 0) {
       return res.status(400).json({ message: "Account record does'nt exist or has been verified already. Please sign up or login." })
     } else {
       const { expiresAt } = userVerificationRecord[0]
       const { otp: dbOtp } = userVerificationRecord[0]
       if (expiresAt < Date.now()) {
-        await UserOtps.destroy({ userId })
+        await UserOtps.destroy({ email })
         return res.status(402).json({ message: "Otp has expired", isSuccess: false })
       } else {
         if (otp === dbOtp) {
-          await User.update({ is_verified: true }, { where: { id: userId } })
-          await UserOtps.destroy({ where: { userId: userId } })
+          await UserOtps.destroy({ where: { email } })
           return res.status(200).json({ message: "The email has been verified", isSuccess: true })
         } else {
           return res.status(402).json({ message: "Otp is incorrect", isSuccess: false })
