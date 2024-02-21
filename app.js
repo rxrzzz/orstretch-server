@@ -31,5 +31,8 @@ app.use("/api/baselinesurvey", baselineSurveyRouter);
 const endofdaySurveyRouter = require("./routes/endofdaysurvey.route");
 app.use("/api/endofdaysurvey", endofdaySurveyRouter);
 
+const surveyRouter = require("./routes/survey.route")
+app.use("/api/survey", surveyRouter);
+
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => console.log(`🚀 @ http://localhost:${PORT}`));
