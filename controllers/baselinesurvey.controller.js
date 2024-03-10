@@ -8,6 +8,7 @@ const excelJs = require("exceljs");
 const nodeMailer = require("nodemailer");
 const Client = require("ssh2-sftp-client");
 const fs = require("fs");
+
 const sendEmail = async (req, res) => {
   let emailToSendMessageTo = req.query.email;
   console.log({ emailToSendMessageTo });
@@ -20,7 +21,6 @@ const sendEmail = async (req, res) => {
   };
 
   let transporter = nodeMailer.createTransport(config);
-
   let message = {
     from: `'"Mayo Clinic" <${process.env.EMAIL}>'`,
     to: "adeleyetemiloluwa674@gmail.com",

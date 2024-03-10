@@ -2,18 +2,16 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('survey_responses', {
-      id: {
+      responseID: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
       externalReferenceId: {
         type: Sequelize.INTEGER,
-        allowNull: false
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       firstName: {
         type: Sequelize.STRING

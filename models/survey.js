@@ -1,10 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
   const Survey = sequelize.define(
     "survey", {
-    id: {
+    surveyID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
     },
     name: {
       type: DataTypes.STRING,

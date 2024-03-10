@@ -448,6 +448,23 @@ const updateUser = async (req, res) => {
   }
 };
 
+const updateUserSurvey = async (req, res) => {
+  try {
+    const survey_id = req.body.survey_id;
+    const email = req.body.email;
+    if (!survey_id || !email) {
+      return res.status(400).json({ message: "Email and Survey ID should be specified", isSuccess: false })
+    }
+    const userExists = await User.findOne({ where: { email } })
+    if (!userExists) {
+      return res.status(404).json({ message: "User does not exist", isSuccess: false })
+    }
+    await User.update({ survey_no: survey_id }, { where: { email } })
+    return res.status(200).json({ message: "User default survey updated successfully.", isSuccess: true })
+  } catch (err) {
+    return res.status(500).json({ message: err, isSuccess: false })
+  }
+}
 const exportUser = async (req, res) => {
   try {
     const idArray = req.query.ids;
@@ -713,4 +730,5 @@ module.exports = {
   verifyOTP,
   searchUsers,
   exportUser,
+  updateUserSurvey,
 };

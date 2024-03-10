@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const SurveyResponse = sequelize.define(
     "survey_responses", {
-    id: {
+    responseID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,

@@ -59,11 +59,11 @@ db.endofday_survey.belongsTo(db.users, {
   as: "user",
 });
 db.survey.hasMany(db.survey_responses, {
-  foreignKey: "surveyid",
+  foreignKey: "surveyID",
   as: "survey_response"
 })
 db.survey_responses.belongsTo(db.survey, {
-  foreignKey: "surveyid",
+  foreignKey: "surveyID",
   as: "survey"
 })
 module.exports = db;

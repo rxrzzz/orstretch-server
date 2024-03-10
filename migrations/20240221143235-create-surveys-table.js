@@ -2,20 +2,18 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('surveys', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
+      surveyID: {
+        type: Sequelize.STRING,
+        primaryKey: true
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      endpointLink: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       surveyLink: {
+        type: Sequelize.STRING,
+      },
+      endpointLink: {
         type: Sequelize.STRING,
       },
       Q1: {

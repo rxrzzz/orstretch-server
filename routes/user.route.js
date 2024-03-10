@@ -16,4 +16,5 @@ router.get(
 router.post("/changeUserPassword", userController.changeUserPassword);
 router.post("/sendOTP", userController.sendOTP);
 router.post("/verifyOTP", userController.verifyOTP)
+router.put("/updateUserSurvey", userController.updateUserSurvey)
 module.exports = router;

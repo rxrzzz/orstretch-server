@@ -87,6 +87,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
         allowNull: false
+      },
+      survey_no: {
+        type: DataTypes.STRING,
+        defaultValue: "SV_ebd7AWFnBL8r02O",
+        allowNull: false
       }
     },
     { freezeTableName: true, tableName: "user" }
