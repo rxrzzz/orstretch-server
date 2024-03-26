@@ -70,6 +70,21 @@ module.exports = (sequelize, DataTypes) => {
       most_common_procedures_c: {
         type: DataTypes.STRING(45),
       },
+      pain_endoscopic_surgery: {
+        type: DataTypes.INTEGER
+      },
+      pain_orifice_surgery: {
+        type: DataTypes.INTEGER
+      },
+      weight: {
+        type: DataTypes.INTEGER
+      },
+      years_endoscopic_surgery: {
+        type: DataTypes.INTEGER
+      },
+      years_orifice_surgery: {
+        type: DataTypes.INTEGER
+      },
       createdAt: {
         type: DataTypes.DATE,
         field: "create_timestamp",

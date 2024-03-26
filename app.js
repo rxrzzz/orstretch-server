@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const axios = require("axios")
 require("dotenv").config();
 // const verifyToken = require("./middleware/verifyToken");
 const app = express();
@@ -7,44 +8,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 
-function getResponse(d, dataCenter, apiToken) {
-  const responseID = d['ResponseID']
-  const surveyID = d['SurveyID']
-  const headers = {
-    "content-type": "application/json",
-    "x-api-token": apiToken,
-  }
-  const apiUrl = `https://${dataCenter}.qualtrics.com/API/v3/surveys/${surveyID}/responses/${responseID}`;
 
-  axios.get(apiUrl, { headers })
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.log("Error: " + error.message);
-    });
-}
+// app.post('/fillBaselineSurveyResponse', (req, res) => {
+//   const responseData = req.body;
+//   const responseId = responseData;
+//   console.log('Received webhook notification for response ID:', responseId);
+//   res.status(200).json(responseData);
+// });
 
-function parseData(c) {
-  const parsedData = querystring.parse(c.toString())
-  parsedData['CompletedDate'] = decodeURIComponent(parsedData['CompletedDate'])
-  return parsedData
-}
 
-app.post('/', (req, res) => {
-  const postData = parseData(req.body);
-  const apiToken = "Bih0jEQQBYPyVmFomf9vpZU56YFFDvDFVbJ7dgk5";
-  const dataCenter = "iad1";
-  if (!apiToken || !dataCenter) {
-    console.log("Set environment variables APIKEY and DATACENTER");
-    process.exit(2);
-  }
-  getResponse(postData, dataCenter, apiToken);
-  res.send('Received');
-});
 
 const accountRouter = require("./routes/account.route");
 app.use("/api/accounts", accountRouter);
+
 
 // app.use(verifyToken);
 
@@ -71,6 +47,32 @@ app.use("/api/survey", surveyRouter);
 
 const PORT = process.env.PORT || 8081;
 const HOST = process.env.HOST || "127.0.0.1"
+
 app.listen(PORT, HOST, () => {
   console.log(`Server running at http://${HOST}:${PORT}/`);
 });
+
+// const apiToken = 'Bih0jEQQBYPyVmFomf9vpZU56YFFDvDFVbJ7dgk5';
+// const surveyId = 'SV_ebd7AWFnBL8r02O';
+// const datacenter = 'iad1';
+// const webhookUrl = `https://easy-egret-tough.ngrok-free.app/api/baselinesurvey/fillBaselineSurveyResponse`; // Replace with your Ngrok URL
+// const eventSubscriptionUrl = `https://${datacenter}.qualtrics.com/API/v3/eventsubscriptions/`;
+
+// const eventData = {
+//   topics: `surveyengine.completedResponse.${surveyId}`,
+//   publicationUrl: webhookUrl,
+//   encrypt: false
+// };
+
+// const headers = {
+//   'X-API-TOKEN': apiToken,
+//   'Content-Type': 'application/json'
+// };
+
+// axios.post(eventSubscriptionUrl, eventData, { headers })
+//   .then(response => {
+//     console.log('Event subscription successful:', response.data);
+//   })
+//   .catch(error => {
+//     console.error('Error subscribing to events:', error.message);
+//   });
